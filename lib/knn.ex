@@ -5,7 +5,7 @@ defmodule KNN do
   """
   def compute(input, dataset, k \\ 3) do
     KNN.sort(input, dataset)
-    |> takeK(k)
+    |> Enum.take(k)
     |> getTop
   end
 
@@ -13,32 +13,25 @@ defmodule KNN do
   Get top elements from the sorted dataset
   """
   def getTop(dataset) do
-    Enum.group_by(dataset, fn(data) -> elem(data, 2) end)
-    |> Enum.max_by(fn(x) -> length(elem(x, 1)) end)
+    Enum.group_by(dataset, &(elem(&1, 2)))
+    |> Enum.max_by(&(length(elem(&1, 1))))
     |> elem(0)
   end
-
-  @doc """
-  Return top K elements
-  """
-  def takeK(dataset, k \\ 3), do: Enum.take(dataset, k)
 
   @doc """
   Sort the dataset by the euclidian distance
   """
   def sort(input, dataset) do
-    Enum.sort_by(dataset, fn(data) -> distance(input, data) end)
+    Enum.sort_by(dataset, &(distance(&1, input)))
   end
 
   @doc """
   Compute the distance between two points in 2 dimensions
   """
   def distance(a, b) do
-    x0 = elem(a, 0)
-    y0 = elem(a, 1)
-    x1 = elem(b, 0)
-    y1 = elem(b, 1)
-    :math.pow(x0 - x1, 2) + :math.pow(y0 - y1, 2)
+    x = elem(a, 0) - elem(b, 0)
+    y = elem(a, 1) - elem(b, 1)
+    :math.pow(x, 2) + :math.pow(y, 2)
     |> :math.sqrt
   end
 end

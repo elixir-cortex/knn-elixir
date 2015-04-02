@@ -31,11 +31,6 @@ defmodule KNNTest do
     assert hd(sorted_list) == input
   end
 
-  test "should return the top k neighbors" do
-    len = 3
-    top_k = KNN.takeK(@dataset, len)
-    assert length(top_k) == len
-  end
 
   test "should compute the KNN" do
     assert KNN.compute({303, 4}, @dataset) == "banana"
